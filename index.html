@@ -37,6 +37,7 @@
             width: 90%;
             z-index: 10;
             position: relative;
+            transition: all 0.5s ease;
         }
 
         h1 {
@@ -68,13 +69,16 @@
             font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(142, 14, 0, 0.2);
         }
 
         button:hover {
             background-color: #b31217;
             transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(142, 14, 0, 0.4);
         }
 
+        /* The Clue Area */
         #result-area {
             margin-top: 2rem;
             display: none;
@@ -86,6 +90,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        /* Heart Animation */
         .heart {
             position: fixed;
             font-size: 1.5rem;
@@ -108,17 +113,15 @@
             margin-top: 15px;
             background-color: var(--rose-gold);
             color: white;
-            padding: 12px 25px;
+            padding: 10px 25px;
             border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
             transition: background 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .video-btn:hover {
             background-color: #c99155;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
 
         .error {
@@ -126,6 +129,7 @@
             font-size: 0.9rem;
             margin-top: 15px;
             min-height: 1.2rem;
+            font-style: italic;
         }
     </style>
 </head>
@@ -133,16 +137,16 @@
 
     <div class="container" id="mainCard">
         <h1>For My Dearest...</h1>
-        <p id="instruction-text">Every journey begins with a single secret. Enter the code to reveal your TREASURE.</p>
+        <p id="instruction-text">Every journey begins with a single secret. Enter the code to reveal your next clue.</p>
         
         <input type="text" id="secretCode" placeholder="Enter Code..." autocomplete="off">
         <br>
         <button id="unlockBtn" onclick="checkCode()">Unlock My Heart</button>
 
         <div id="result-area">
-            <h3>Correct my LOVE! ❤️</h3>
-            <p>ENJOY YOUR TREASURE !!:</p>
-            <a href="Valentine.mp4" download="Valentine.mp4" class="video-btn">💾 YOUR TREASURE</a>
+            <h3>Correct! ❤️</h3>
+            <p>I've been waiting for you to find this.</p>
+            <a href="https://photos.app.goo.gl/cWwLqj6rS38bJARy7" target="_blank" class="video-btn">✨ Your TREASURE ✨</a>
         </div>
         
         <p id="error-msg" class="error"></p>
@@ -152,13 +156,17 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
+            // Randomly pick between different heart colors/shades
             const hearts = ['❤️', '💖', '💕', '💗'];
             heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's'; // Between 3-5 seconds
             heart.style.fontSize = (Math.random() * 10 + 20) + 'px';
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
         }
 
         function checkCode() {
@@ -170,19 +178,31 @@
             const instr = document.getElementById('instruction-text');
 
             if (codeInput === "7HGB") {
+                // Trigger continuous heart rain for a few seconds
                 const heartInterval = setInterval(createHeart, 70);
+                
+                // Visual feedback: hide the form
                 inputField.style.display = 'none';
                 btn.style.display = 'none';
                 instr.style.display = 'none';
                 errorMsg.innerText = "";
 
+                // Reveal the link after a slight "suspense" delay
                 setTimeout(() => {
                     resultArea.style.display = 'block';
                 }, 800);
 
-                setTimeout(() => { clearInterval(heartInterval); }, 8000);
+                // Let the hearts fall for 8 seconds
+                setTimeout(() => {
+                    clearInterval(heartInterval);
+                }, 8000);
+
             } else {
                 errorMsg.innerText = "That's not quite right, my love. Try again!";
+                // Temporary shake effect
+                const card = document.getElementById('mainCard');
+                card.style.borderColor = '#d9534f';
+                setTimeout(() => { card.style.borderColor = 'white'; }, 1000);
             }
         }
     </script>
